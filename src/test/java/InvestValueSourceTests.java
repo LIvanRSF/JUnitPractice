@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class InvestValueSourceTests {
+public class InvestValueSourceTests extends BaseTestClass {
 
     double criticalLowPrice = 100.1d;
 
@@ -17,9 +17,6 @@ public class InvestValueSourceTests {
     @ValueSource(strings = {"SBER", "SBER_p"})
     @ParameterizedTest(name = "Стоимость акций {0}")
     public void stockPriceTest(String stockName) {
-        //Открываем сайт
-        Selenide.open("https://ru.investing.com/");
-
         //Вводим в поиске название акции
         $(".searchText").setValue(stockName).pressEnter();
 
@@ -32,8 +29,5 @@ public class InvestValueSourceTests {
 
         //Сравниваем, что текущая цена больше определенной
         Assertions.assertTrue(actualPrice > criticalLowPrice);
-
-        //приходится закрывать ВебДрайвер перед вторым тестом, т.к. на сайте срабатывает проверка "на робота"
-        closeWebDriver();
     }
 }

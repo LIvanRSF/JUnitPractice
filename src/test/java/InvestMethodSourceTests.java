@@ -1,16 +1,14 @@
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class InvestMethodSourceTests {
+public class InvestMethodSourceTests  extends BaseTestClass {
 
     static Stream<Arguments> investTestDataProvider() {
         return Stream.of(
@@ -23,9 +21,6 @@ public class InvestMethodSourceTests {
     @MethodSource(value = "investTestDataProvider")
     @ParameterizedTest(name = "На странице акции {0}  должен быть видна ее стоимость")
     public void methodSourceInvestTest(String stockName) {
-        //Открываем сайт
-        Selenide.open("https://ru.investing.com/");
-
         //Вводим в поиске название акции
         $(".searchText").setValue(stockName).pressEnter();
 
@@ -34,9 +29,5 @@ public class InvestMethodSourceTests {
 
         //Находим на странице актуальную цену, проверяем ее на видимость
         $("[data-test=instrument-price-last]").shouldBe(Condition.visible);
-
-        //приходится закрывать ВебДрайвер перед вторым тестом, т.к. на сайте срабатывает проверка "на робота"
-        closeWebDriver();
-
     }
 }
